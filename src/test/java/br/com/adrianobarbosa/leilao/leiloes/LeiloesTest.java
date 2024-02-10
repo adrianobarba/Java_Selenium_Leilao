@@ -12,20 +12,20 @@ import java.time.format.DateTimeFormatter;
 public class LeiloesTest {
 
     private LeiloesPage paginaDeLeiloes;
-    private CadastroLeilaoPage paginaDeCadastro;
+    private CadastroLeilaoPage paginaDeCadastroDeLeilao;
 
     @BeforeEach
     public void beforeEach() {
         LoginPage paginaDeLogin = new LoginPage();
-        paginaDeLogin.preencheFormularioDeLogin("fulano", "pass");
-        this.paginaDeLeiloes = paginaDeLogin.efetuaLogin();
-        CadastroLeilaoPage paginaDeCadastro = paginaDeLeiloes.carregarFormulario();
+        this.paginaDeLeiloes = paginaDeLogin.efetuarLogin("fulano", "pass");
+        this.paginaDeCadastroDeLeilao = paginaDeLeiloes.carregarFormulario();
     }
 
 
     @AfterEach
     public void afterEach() {
         this.paginaDeLeiloes.fechar();
+        this.paginaDeCadastroDeLeilao.fechar();
     }
 
     @Test
@@ -34,17 +34,18 @@ public class LeiloesTest {
         String nome = "Leilao do dia " + hoje;
         String valor = "500.00";
 
-        this.paginaDeLeiloes = paginaDeCadastro.cadastrarLeilao(nome, valor, hoje);
-       Assert.assertTrue(paginaDeLeiloes.isLeilaoCadastrado(nome, valor, hoje));
+        this.paginaDeLeiloes = paginaDeCadastroDeLeilao.cadastrarLeilao(nomeLeilao, valorInicial, hoje);
+
+        Assert.assertTrue(paginaDeLeiloes.isLeilaoCadastrado(nomeLeilao, valorInicial, hoje));
 
     }
 
     @Test
     public void deveriaValidarCadastroDeLeilao() {
-        this.paginaDeLeiloes = paginaDeCadastro.cadastrarLeilao("", "","");
+        this.paginaDeLeiloes = paginaDeCadastroDeLeilao.cadastrarLeilao("", "", "");
 
-        Assert.assertFalse(this.paginaDeCadastro.isPaginaAtual());
-        Assert.assertTrue(this.paginaDeLeiloes.isPaginaAtual());
-        Assert.assertTrue(this.paginaDeCadastro.isPaginaDeValidacaoVisiveis());
+        Assert.assertFalse(paginaDeCadastroDeLeilao.isPaginaAtual());
+        Assert.assertTrue(paginaDeLeiloes.isPaginaAtual());
+        Assert.assertTrue(paginaDeCadastroDeLeilao.isMensagensDeValidacaoVisiveis());
     }
 }

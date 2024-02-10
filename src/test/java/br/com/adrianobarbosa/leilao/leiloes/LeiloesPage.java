@@ -1,24 +1,22 @@
 package br.com.adrianobarbosa.leilao.leiloes;
 
+import br.com.adrianobarbosa.leilao.PageObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+public class LeiloesPage extends PageObject {
 
-public class LeiloesPage {
+    private static final String URL_LIST = "http://localhost:8080/leiloes";
+    private static final String URL_FORM = "http://localhost:8080/leiloes/new";
 
-    private static final String URL_CADASTRO_LEILAO = "http://localhost:8080/leiloes/new";
-    private static final String URL_LEILOES = "http://localhost:8080/leiloes";
-    private WebDriver browser;
 
     public LeiloesPage(WebDriver browser) {
-        this.browser = browser;
+        super(browser);
     }
-    public void fechar() {
-        this.browser.quit();
-    }
+
     public CadastroLeilaoPage carregarFormulario() {
-        this.browser.navigate().to(URL_CADASTRO_LEILAO);
+        this.browser.navigate().to(URL_FORM);
         return new CadastroLeilaoPage(browser);
     }
 
@@ -42,6 +40,7 @@ public class LeiloesPage {
     }
 
     public boolean isPaginaAtual() {
-        return browser.getCurrentUrl().equals(URL_LEILOES);
+        return this.browser.getCurrentUrl().equals(URL_LIST);
     }
+
 }
